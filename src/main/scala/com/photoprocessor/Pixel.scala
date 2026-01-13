@@ -11,11 +11,11 @@ case class Pixel(r: Int, g: Int, b: Int) {
   assert(b >= 0 && b < 256)
 
 
-  def toInt: Int = {
+  private def toInt: Int = {
     (r << 16) | (g << 8) | b
   }
 
-  infix def +(other: Pixel): Pixel = {
+  private infix def +(other: Pixel): Pixel = {
     Pixel(
       Pixel.clamp(r + other.r),
       Pixel.clamp(g + other.g),
@@ -35,11 +35,12 @@ case class Pixel(r: Int, g: Int, b: Int) {
 
 object Pixel {
 
-  def clamp(v: Int) = {
-    if (v <=0) then 0
-    else if (v >= 255) then 255
+  private def clamp(v: Int): Int = {
+    if v <=0 then 0
+    else if v >= 255 then 255
     else v
   }
+
 
   def main(args: Array[String]): Unit = {
     val red = Pixel(255, 0, 0)
@@ -47,10 +48,18 @@ object Pixel {
     val yellow = red + green
     val black = Pixel (0, 0, 0)
     val white = Pixel(255, 255, 255)
+    val pink = Transparency(0.5).combine(red, white)
+    val gray = Pixel(128, 128, 128)
+    val darkRed = Multiply.combine(red, gray)
+    val lightRed = Screen.combine(red, gray)
     yellow.draw(40, 40, "src/main/resources/pixels/yellow.jpg")
     red.draw(40, 40, "src/main/resources/pixels/red.jpg")
     green.draw(40, 40, "src/main/resources/pixels/green.jpg")
     black.draw(40, 40, "src/main/resources/pixels/black.jpg")
     white.draw(40, 40, "src/main/resources/pixels/white.jpg")
+    pink.draw(40, 40, "src/main/resources/pixels/pink.jpg")
+    gray.draw(40, 40, "src/main/resources/pixels/gray.jpg")
+    darkRed.draw(40, 40, "src/main/resources/pixels/darkRed.jpg")
+    lightRed.draw(40, 40, "src/main/resources/pixels/lightRed.jpg")
   }
 }
