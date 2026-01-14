@@ -11,11 +11,11 @@ case class Pixel(r: Int, g: Int, b: Int) {
   assert(b >= 0 && b < 256)
 
 
-  private def toInt: Int = {
+  def toInt: Int = {
     (r << 16) | (g << 8) | b
   }
 
-  private infix def +(other: Pixel): Pixel = {
+  infix def +(other: Pixel): Pixel = {
     Pixel(
       Pixel.clamp(r + other.r),
       Pixel.clamp(g + other.g),
@@ -39,6 +39,14 @@ object Pixel {
     if v <=0 then 0
     else if v >= 255 then 255
     else v
+  }
+
+  def fromHex(color: Int): Pixel = {
+    Pixel(
+      (color & (0xFF0000)) >> 16,
+      (color & (0xFF00)) >> 8,
+      (color & (0xFF))
+    )
   }
 
 
