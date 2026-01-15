@@ -23,6 +23,21 @@ class Image private (private val buffImage: BufferedImage){
   def saveResource(path: String): Unit = {
     save(s"src/main/resources/$path")
   }
+
+  def crop(startX: Int, startY: Int, w: Int, h: Int): Image = {
+    assert(
+      startX >= 0 && startX < width &&
+        startY >= 0 && startY < height &&
+        w > 0 && h > 0 && 
+        startX + w < width && startY + h < height
+    )
+    
+    val newPixels = Array.fill(w * h)(0)
+    buffImage.getRGB(startX, startY, w, h, newPixels, 0, w)
+    val newBuffImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
+    newBuffImage.setRGB(0,0,w,h, newPixels, 0, w)
+    new Image(newBuffImage)
+  }
 }
 
 object Image {
